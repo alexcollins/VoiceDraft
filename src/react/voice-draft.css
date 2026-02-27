@@ -1,0 +1,83 @@
+.vd-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid #d4d4d8;
+  border-radius: 999px;
+  padding: 6px 8px;
+  background: #ffffff;
+  color: #18181b;
+}
+
+.vd-bar-idle {
+  justify-content: space-between;
+}
+
+.vd-bar-listening {
+  justify-content: stretch;
+}
+
+.vd-button {
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  height: 32px;
+  min-width: 32px;
+  padding: 0 10px;
+  font: inherit;
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.vd-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.vd-button-start {
+  background: #18181b;
+  color: #fafafa;
+}
+
+.vd-button-cancel {
+  background: #f4f4f5;
+  color: #52525b;
+}
+
+.vd-button-confirm {
+  background: #18181b;
+  color: #fafafa;
+}
+
+.vd-waveform {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1px;
+  overflow: hidden;
+}
+
+.vd-wave {
+  width: 2px;
+  border-radius: 999px;
+  background: #71717a;
+}
+
+.vd-time {
+  min-width: 42px;
+  text-align: right;
+  font-size: 12px;
+  color: #71717a;
+  font-variant-numeric: tabular-nums;
+}
+
+.vd-hint {
+  font-size: 12px;
+  color: #71717a;
+}

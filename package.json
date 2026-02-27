@@ -1,0 +1,47 @@
+{
+  "name": "voicedraft",
+  "version": "0.1.0",
+  "description": "Native-first voice input composer with recording UI, confirm/cancel flow, and capture controls.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "files": [
+    "src"
+  ],
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    },
+    "./react": {
+      "types": "./src/react/index.ts",
+      "import": "./src/react/index.ts"
+    },
+    "./styles.css": "./src/react/voice-draft.css"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "typescript": "^5.8.0"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "benchmark:stt": "node scripts/benchmark-stt.mjs"
+  },
+  "keywords": [
+    "voice",
+    "speech-to-text",
+    "dictation",
+    "asr",
+    "stt",
+    "react",
+    "native",
+    "microphone"
+  ]
+}

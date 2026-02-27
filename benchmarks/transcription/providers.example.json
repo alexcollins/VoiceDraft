@@ -1,0 +1,44 @@
+[
+  {
+    "id": "antimateria-webspeech",
+    "type": "datasetHypothesis",
+    "field": "antimateria-webspeech",
+    "enabled": true,
+    "costPerHourUsd": 0,
+    "integrationEffort": 1
+  },
+  {
+    "id": "openai-whisper-1",
+    "type": "openai",
+    "model": "whisper-1",
+    "apiKeyEnv": "OPENAI_API_KEY",
+    "enabled": false,
+    "costPerHourUsd": 0.36,
+    "integrationEffort": 2
+  },
+  {
+    "id": "groq-whisper-large-v3-turbo",
+    "type": "groq",
+    "model": "whisper-large-v3-turbo",
+    "apiKeyEnv": "GROQ_API_KEY",
+    "enabled": false,
+    "costPerHourUsd": 0.04,
+    "integrationEffort": 2
+  },
+  {
+    "id": "deepgram-nova-3",
+    "type": "deepgram",
+    "model": "nova-3",
+    "apiKeyEnv": "DEEPGRAM_API_KEY",
+    "enabled": false,
+    "costPerHourUsd": 0.288,
+    "integrationEffort": 2
+  },
+  {
+    "id": "custom-local-adapter",
+    "type": "command",
+    "command": "node scripts/my-local-transcriber.mjs \"{{audioFile}}\"",
+    "enabled": false,
+    "integrationEffort": 3
+  }
+]
