@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { UseVoiceDraftOptions, VoiceDraftState } from "./types";
+import type { UseVoiceDraftOptions, VoiceDraftState } from "./types.js";
 
 interface SpeechRecognitionAlternativeLike {
   transcript: string;

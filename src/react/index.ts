@@ -1,9 +1,9 @@
-export { useVoiceDraft } from "./use-voice-draft";
-export { VoiceDraftBar } from "./voice-draft-bar";
+export { useVoiceDraft } from "./use-voice-draft.js";
+export { VoiceDraftBar } from "./voice-draft-bar.js";
 export type {
   UseVoiceDraftOptions,
   VoiceDraftBarProps,
   VoiceDraftNoiseGateOptions,
   VoiceDraftSilenceOptions,
   VoiceDraftState,
-} from "./types";
+} from "./types.js";

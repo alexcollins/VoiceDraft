@@ -1,8 +1,7 @@
 "use client";
 
-import type { VoiceDraftBarProps } from "./types";
-import { formatElapsed } from "../utils/format";
-import "./voice-draft.css";
+import type { VoiceDraftBarProps } from "./types.js";
+import { formatElapsed } from "../utils/format.js";
 
 function cx(...values: Array<string | undefined | false>): string {
   return values.filter(Boolean).join(" ");

@@ -1,2 +1,2 @@
-export * from "./react";
-export type { VoiceDraftAdapter, VoiceDraftAdapterStartContext, VoiceDraftAdapterStopResult } from "./core/adapters";
+export * from "./react/index.js";
+export type { VoiceDraftAdapter, VoiceDraftAdapterStartContext, VoiceDraftAdapterStopResult } from "./core/adapters.js";

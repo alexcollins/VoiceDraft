@@ -4,22 +4,24 @@
   "description": "Native-first voice input composer with recording UI, confirm/cancel flow, and capture controls.",
   "license": "MIT",
   "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "sideEffects": [
     "**/*.css"
   ],
   "files": [
-    "src"
+    "dist"
   ],
   "exports": {
     ".": {
-      "types": "./src/index.ts",
-      "import": "./src/index.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
     },
     "./react": {
-      "types": "./src/react/index.ts",
-      "import": "./src/react/index.ts"
+      "types": "./dist/react/index.d.ts",
+      "import": "./dist/react/index.js"
     },
-    "./styles.css": "./src/react/voice-draft.css"
+    "./styles.css": "./dist/react/voice-draft.css"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
@@ -31,6 +33,9 @@
     "typescript": "^5.8.0"
   },
   "scripts": {
+    "clean": "node scripts/clean-dist.mjs",
+    "build": "npm run clean && tsc -p tsconfig.build.json && node scripts/copy-styles.mjs",
+    "prepack": "npm run build",
     "typecheck": "tsc --noEmit",
     "benchmark:stt": "node scripts/benchmark-stt.mjs"
   },
