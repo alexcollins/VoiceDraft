@@ -37,7 +37,8 @@
     "build": "npm run clean && tsc -p tsconfig.build.json && node scripts/copy-styles.mjs",
     "prepack": "npm run build",
     "typecheck": "tsc --noEmit",
-    "benchmark:stt": "node scripts/benchmark-stt.mjs"
+    "benchmark:stt": "node scripts/benchmark-stt.mjs",
+    "test": "npm run build && node tests/format.test.mjs"
   },
   "keywords": [
     "voice",

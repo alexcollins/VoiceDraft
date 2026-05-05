@@ -88,6 +88,24 @@ Props: `listening` · `canTranscribe` · `waveform` · `elapsed` · `onStart` ·
 
 ---
 
+
+## Production Readiness
+
+VoiceDraft is publishable as a package today, but production apps should ship with a few guardrails:
+
+- **Capability fallback:** Always check `canTranscribe` and render a typed-input fallback path.
+- **Permission handling:** Pass `onError` to show user-friendly prompts when microphone permission is denied.
+- **Post-processing:** Treat transcript text as a draft and run your own validation/moderation before submit.
+- **Cross-browser QA:** Verify behavior in Chrome, Edge, and Safari where Web Speech support differs.
+
+### Launch checklist for AI apps
+
+1. Add product copy and onboarding around browser mic permission.
+2. Persist drafts in your app state so transcripts are recoverable.
+3. Add server-side logging for speech failures and cancel/confirm rates.
+4. Add your preferred cloud STT fallback for unsupported browsers.
+5. Run CI (`npm run typecheck`, `npm run build`, `npm test`) on every PR.
+
 ## Browser Support
 
 Requires `SpeechRecognition` or `webkitSpeechRecognition`. Use `canTranscribe` to gracefully disable the mic path when unavailable.
