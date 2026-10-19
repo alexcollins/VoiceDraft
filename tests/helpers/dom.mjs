@@ -51,7 +51,13 @@ export function installFakeRecognition(window, { onDevice = "available" } = {}) 
       this.starts = 0;
       handle.instances.push(this);
     }
-    start(track) {
+    start(...args) {
+      /* Like Chrome: start() or start(track), and an explicit undefined
+         picks the track overload and throws. */
+      if (args.length && !(args[0] && args[0].kind === "audio")) {
+        throw new TypeError("Failed to execute 'start' on 'SpeechRecognition': parameter 1 is not of type 'MediaStreamTrack'.");
+      }
+      const [track] = args;
       this.running = true;
       this.track = track;
       this.starts += 1;
