@@ -247,3 +247,12 @@ test("silence auto-stop actually fires through the meter, and hands over the tex
   delete globalThis.AudioContext;
   Object.defineProperty(navigator, "mediaDevices", { configurable: true, value: undefined });
 });
+
+test("without a chosen microphone, start() gets no argument (Chrome throws on start(undefined))", async () => {
+  const el = textarea();
+  await session.startDictation("p", fieldSink(() => el), { lang: "en-US" });
+  assert.equal(session.getSnapshot().status, "listening");
+  assert.equal(session.getSnapshot().error, null);
+  speech.last().onend();
+  assert.equal(speech.last().starts, 2, "the restart also starts cleanly");
+});

@@ -142,6 +142,14 @@ const join = (...parts: string[]) =>
 
 const textOf = (s: Session) => join(s.kept, s.final, s.interim);
 
+/* Chrome overloads start() with start(track), and an explicit undefined
+   picks the track overload and throws a TypeError. Pass a track only when
+   a microphone was chosen. */
+function listen(rec: Recognition, track: MediaStreamTrack | undefined) {
+  if (track) rec.start(track);
+  else rec.start();
+}
+
 function describe(code: DictationErrorCode, lang: string): string {
   switch (code) {
     case "not-allowed":
@@ -363,7 +371,7 @@ export async function startDictation(owner: string, sink: DictationSink, options
       s.restarts = [...s.restarts.filter((t) => now - t < 4000), now];
       if (s.restarts.length > 4) return fail(owner, "failed", lang);
       try {
-        rec.start(s.track);
+        listen(rec, s.track);
       } catch {
         teardown(true);
       }
@@ -387,7 +395,7 @@ export async function startDictation(owner: string, sink: DictationSink, options
   }
 
   try {
-    if (rec) rec.start(s.track);
+    if (rec) listen(rec, s.track);
     else await s.adapter!.start({ locale: lang });
   } catch {
     if (session === s) fail(owner, "failed", lang);
