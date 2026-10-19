@@ -1,8 +1,17 @@
 {
   "name": "voicedraft",
-  "version": "0.1.0",
-  "description": "Native-first voice input composer with recording UI, confirm/cancel flow, and capture controls.",
+  "version": "0.2.0",
+  "description": "Voice dictation for web apps: Claude-style mic button that writes into any field as you speak. On-device Web Speech first, no inference engine required.",
   "license": "MIT",
+  "author": "Alex Collins (https://arkiiitekt.com)",
+  "homepage": "https://github.com/alexcollins/voicedraft#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexcollins/voicedraft.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alexcollins/voicedraft/issues"
+  },
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -17,19 +26,42 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
+    "./core": {
+      "types": "./dist/core/index.d.ts",
+      "import": "./dist/core/index.js"
+    },
     "./react": {
       "types": "./dist/react/index.d.ts",
       "import": "./dist/react/index.js"
     },
-    "./styles.css": "./dist/react/voice-draft.css"
+    "./styles.css": "./dist/react/voice-draft.css",
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
     "react-dom": "^18.0.0 || ^19.0.0"
   },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    }
+  },
   "devDependencies": {
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
+    "jsdom": "^26.1.0",
+    "prosemirror-model": "^1.25.1",
+    "prosemirror-schema-basic": "^1.2.4",
+    "prosemirror-state": "^1.4.3",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "typescript": "^5.8.0"
   },
   "scripts": {
@@ -38,7 +70,9 @@
     "prepack": "npm run build",
     "typecheck": "tsc --noEmit",
     "benchmark:stt": "node scripts/benchmark-stt.mjs",
-    "test": "npm run build && node tests/format.test.mjs"
+    "test": "npm run build && node --test \"tests/*.test.mjs\"",
+    "test:only": "node --test \"tests/*.test.mjs\"",
+    "pack:check": "npm pack --dry-run"
   },
   "keywords": [
     "voice",
@@ -48,6 +82,11 @@
     "stt",
     "react",
     "native",
-    "microphone"
+    "microphone",
+    "dictation-button",
+    "web-speech-api",
+    "on-device",
+    "prosemirror",
+    "tiptap"
   ]
 }
