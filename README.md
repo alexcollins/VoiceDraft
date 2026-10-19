@@ -17,7 +17,7 @@ It builds itself on install (`prepare`). Not on the npm registry.
 - **A mic button for any field.** Textareas, inputs (controlled or not), and ProseMirror / Tiptap editors. The words appear at the caret as they're heard.
 - **Claude's gestures.** Click for long-form (click again, press Enter or start typing to keep the words). Press and hold to record until you let go. Escape puts the field back exactly as it was. Right-click for the microphone, the language and "Hold to record".
 - **On-device first.** Uses the browser's Web Speech API, and runs it on the device where Chrome and Edge have the language pack (`processLocally`). An optional "on-device only" mode refuses the browser's online engine.
-- **A meter that doesn't hurt.** The waveform writes transforms on refs, so listening never re-renders your component. Phones get a breathing indicator instead of a second mic stream, because on Android and iOS that second stream is what kills recognition.
+- **A meter that doesn't hurt.** A ring of ticks around the mic follows the voice, drawn inside the button so it takes no room and nothing moves. It writes to the SVG directly, so listening never re-renders your component. Phones get a breathing indicator instead of a second mic stream, because on Android and iOS that second stream is what kills recognition.
 - **Bring your own engine.** Pass an `adapter` to use a cloud transcriber (for Firefox, say) without changing the UI.
 - **No UI-kit dependency.** One stylesheet themed through `--vd-*` custom properties, light and dark built in. The core has no React dependency at all.
 
@@ -35,7 +35,7 @@ export function Composer() {
   return (
     <div style={{ display: "flex", gap: 8, alignItems: "end" }}>
       <textarea ref={field} rows={3} />
-      <DictateButton field={field} wave />
+      <DictateButton field={field} />
     </div>
   );
 }
@@ -94,7 +94,6 @@ In an embedded webview where the API exists but has no speech service behind it 
 | `editorView` | — | `() => view` for ProseMirror (Tiptap: `editor.view`). |
 | `sink` | — | Any other target. |
 | `options` | — | `StartOptions`, passed to every session (below). |
-| `wave` | `false` | A rolling waveform beside the button while it listens. Without it, four bars move inside the button. |
 | `menu` | `true` | The right-click settings. |
 | `size` | `"md"` | `"sm"` is 28px, `"md"` 36px. |
 | `side` | `"top"` | Where the tooltip and menu open. |
