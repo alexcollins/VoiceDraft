@@ -103,43 +103,32 @@
   color: var(--vd-accent-fg);
 }
 
-.vd-dictate-bars,
-.vd-dictate-wave {
-  display: flex;
-  align-items: center;
-  gap: 3px;
+.vd-dictate-button {
+  position: relative;
 }
 
-.vd-dictate-bars {
-  height: 16px;
+/* The mic shrinks a touch to leave room for the ring. */
+.vd-dictate-button > svg:first-child {
+  transition: transform 150ms var(--vd-ease);
 }
 
-.vd-dictate-bar {
-  width: 3px;
-  height: 16px;
-  border-radius: 999px;
-  background: currentColor;
-  transition: transform 75ms var(--vd-ease);
+.vd-dictate-button[data-active] > svg:first-child {
+  transform: scale(0.75);
 }
 
-.vd-dictate-wave {
-  height: 20px;
-  padding: 0 4px;
-  color: var(--vd-muted);
-}
-
-.vd-dictate-wave-bar {
-  width: 2px;
-  height: 20px;
-  border-radius: 999px;
-  background: currentColor;
-  transform: scaleY(0.15);
-  transition: transform 75ms var(--vd-ease);
+.vd-dictate-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
 }
 
 /* No meter (phones): breathe instead of follow the voice. */
-.vd-dictate-bars[data-idle],
-.vd-dictate-wave[data-idle] {
+.vd-dictate-ring[data-idle] {
   animation: vd-breathe 1.6s var(--vd-ease) infinite;
 }
 
@@ -411,8 +400,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .vd-dictate-bars[data-idle],
-  .vd-dictate-wave[data-idle] {
+  .vd-dictate-ring[data-idle] {
     animation: none;
   }
 }

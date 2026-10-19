@@ -9,7 +9,7 @@ export function DictateButtonExample() {
   return (
     <div style={{ display: "flex", gap: 8, alignItems: "flex-end", maxWidth: 680 }}>
       <textarea ref={field} value={value} onChange={(event) => setValue(event.target.value)} rows={4} style={{ flex: 1 }} />
-      <DictateButton field={field} wave />
+      <DictateButton field={field} />
     </div>
   );
 }

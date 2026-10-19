@@ -12,9 +12,10 @@
  *     and Hold to record.
  *
  * The words appear in the target as they are heard. While it listens the
- * button fills in; with `wave` a rolling waveform runs beside it, without one
- * four bars move inside it. The meter writes transforms on refs: listening
- * never re-renders the host. It renders nothing until mounted, and nothing
+ * button fills in and a ring of ticks around the mic follows the voice. The
+ * ring is drawn inside the button, so it takes no room and nothing around it
+ * moves. The meter writes to the ring's SVG directly: listening never
+ * re-renders the host. It renders nothing until mounted, and nothing
  * where there is no recogniser and no adapter.
  *
  * Styled by voicedraft/styles.css, themed through --vd-* custom properties.
@@ -70,7 +71,7 @@ export interface DictateButtonProps {
   /** Passed to every session: adapter, silence, noise gate, lang, meter. */
   options?: StartOptions;
   size?: "sm" | "md";
-  /** A rolling waveform beside the button while it listens — for a composer footer. */
+  /** @deprecated No effect: the level shows as a ring inside the button. */
   wave?: boolean;
   /** The right-click settings. Default true. */
   menu?: boolean;
@@ -86,15 +87,15 @@ export interface DictateButtonHandle {
   toggle: () => void;
 }
 
-const BARS = [
-  { lag: 3, weight: 0.6 },
-  { lag: 0, weight: 1 },
-  { lag: 1, weight: 0.85 },
-  { lag: 5, weight: 0.5 },
-];
-/* At rest the bars still read as a waveform, not as four dots. */
-const rest = (weight: number) => 0.3 + 0.35 * weight;
-const WAVE_BARS = 28;
+/* The ring, in a 36-unit box centred on the mic: ticks start just outside
+   the (shrunk) icon and grow outward to the button's edge. The newest level
+   sits at the top and older ones spread down both sides, so a word ripples
+   round the mic. */
+const TICKS = 24;
+const RING_INNER = 9.5;
+const TICK_REST = 1.2;
+const TICK_MAX = 6.5;
+const historyIndex = (i: number) => Math.min(i, TICKS - i);
 /* Held at least this long, a press is a hold: letting go stops. */
 const HOLD_MS = 350;
 const TIP_DELAY_MS = 300;
@@ -125,7 +126,7 @@ function MicIcon() {
 }
 
 export const DictateButton = forwardRef<DictateButtonHandle, DictateButtonProps>(function DictateButton(
-  { field, editorView, sink, options, size = "md", wave = false, menu = true, disabled, className, side = "top", labels },
+  { field, editorView, sink, options, size = "md", menu = true, disabled, className, side = "top", labels },
   ref,
 ) {
   const text = { ...DEFAULT_LABELS, ...labels };
@@ -139,8 +140,7 @@ export const DictateButton = forwardRef<DictateButtonHandle, DictateButtonProps>
   const [touch, setTouch] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const button = useRef<HTMLButtonElement>(null);
-  const bars = useRef<(HTMLSpanElement | null)[]>([]);
-  const waveBars = useRef<(HTMLSpanElement | null)[]>([]);
+  const ticks = useRef<(SVGLineElement | null)[]>([]);
   const press = useRef<{ at: number; started: boolean } | null>(null);
   const tipTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -171,16 +171,13 @@ export const DictateButton = forwardRef<DictateButtonHandle, DictateButtonProps>
   useEffect(() => {
     if (!metered) return;
     const history: number[] = [];
+    const shown = new Array<number>(TICKS).fill(0);
     return onLevel((level) => {
       history.unshift(level);
-      history.length = Math.min(history.length, WAVE_BARS);
-      BARS.forEach((bar, i) => {
-        const el = bars.current[i];
-        if (el) el.style.transform = `scaleY(${rest(bar.weight) + (1 - rest(bar.weight)) * (history[bar.lag] ?? 0) * bar.weight})`;
-      });
-      for (let i = 0; i < WAVE_BARS; i += 1) {
-        const el = waveBars.current[WAVE_BARS - 1 - i];
-        if (el) el.style.transform = `scaleY(${0.15 + 0.85 * (history[i] ?? 0)})`;
+      history.length = Math.min(history.length, TICKS / 2 + 1);
+      for (let i = 0; i < TICKS; i += 1) {
+        shown[i] += ((history[historyIndex(i)] ?? 0) - shown[i]) * 0.5;
+        ticks.current[i]?.setAttribute("y2", String(-(RING_INNER + TICK_REST + (TICK_MAX - TICK_REST) * shown[i])));
       }
     });
   }, [metered]);
@@ -255,19 +252,6 @@ export const DictateButton = forwardRef<DictateButtonHandle, DictateButtonProps>
 
   return (
     <span className={["vd-dictate", className].filter(Boolean).join(" ")} data-size={size} data-side={side}>
-      {wave && listening && (
-        <span aria-hidden className="vd-dictate-wave" data-idle={!metered || undefined}>
-          {Array.from({ length: WAVE_BARS }, (_, i) => (
-            <span
-              key={i}
-              ref={(el) => {
-                waveBars.current[i] = el;
-              }}
-              className="vd-dictate-wave-bar"
-            />
-          ))}
-        </span>
-      )}
       <button
         ref={button}
         type="button"
@@ -295,21 +279,23 @@ export const DictateButton = forwardRef<DictateButtonHandle, DictateButtonProps>
           if (menu && !touch) setMenuOpen(true);
         }}
       >
-        {active && !wave ? (
-          <span aria-hidden className="vd-dictate-bars" data-idle={!metered || undefined}>
-            {BARS.map((bar, i) => (
-              <span
+        <MicIcon />
+        {active && (
+          <svg aria-hidden viewBox="-18 -18 36 36" className="vd-dictate-ring" data-idle={!metered || undefined}>
+            {Array.from({ length: TICKS }, (_, i) => (
+              <line
                 key={i}
                 ref={(el) => {
-                  bars.current[i] = el;
+                  ticks.current[i] = el;
                 }}
-                className="vd-dictate-bar"
-                style={{ transform: `scaleY(${rest(bar.weight)})` }}
+                transform={`rotate(${(360 / TICKS) * i})`}
+                x1={0}
+                y1={-RING_INNER}
+                x2={0}
+                y2={-(RING_INNER + TICK_REST)}
               />
             ))}
-          </span>
-        ) : (
-          <MicIcon />
+          </svg>
         )}
       </button>
       {tipVisible && (
