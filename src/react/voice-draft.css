@@ -1,35 +1,365 @@
+/*
+ * VoiceDraft styles. Theme by overriding the custom properties on any
+ * ancestor (or :root); they follow the system's light and dark by default.
+ */
+
+:root {
+  --vd-fg: #18181b;
+  --vd-muted: #71717a;
+  --vd-surface: #ffffff;
+  --vd-hover: rgb(24 24 27 / 0.06);
+  --vd-border: rgb(24 24 27 / 0.12);
+  --vd-accent: #18181b;
+  --vd-accent-fg: #fafafa;
+  --vd-danger: #dc2626;
+  --vd-danger-fg: #ffffff;
+  --vd-radius: 8px;
+  --vd-ease: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --vd-fg: #fafafa;
+    --vd-muted: #a1a1aa;
+    --vd-surface: #18181b;
+    --vd-hover: rgb(250 250 250 / 0.08);
+    --vd-border: rgb(250 250 250 / 0.14);
+    --vd-accent: #fafafa;
+    --vd-accent-fg: #18181b;
+  }
+}
+
+.vd-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── DictateButton ─────────────────────────────────────────────────────── */
+
+.vd-dictate {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  --vd-size: 36px;
+}
+
+.vd-dictate[data-size="sm"] {
+  --vd-size: 28px;
+}
+
+.vd-dictate-button {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--vd-size);
+  height: var(--vd-size);
+  padding: 0;
+  border: 0;
+  border-radius: var(--vd-radius);
+  background: transparent;
+  color: var(--vd-muted);
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  transition:
+    color 150ms var(--vd-ease),
+    background-color 150ms var(--vd-ease),
+    transform 150ms var(--vd-ease);
+}
+
+.vd-dictate-button:hover {
+  color: var(--vd-fg);
+  background: var(--vd-hover);
+}
+
+.vd-dictate-button:active {
+  transform: scale(0.96);
+}
+
+.vd-dictate-button:focus-visible {
+  outline: 2px solid var(--vd-accent);
+  outline-offset: 2px;
+}
+
+.vd-dictate-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.vd-dictate-button[data-active] {
+  background: var(--vd-accent);
+  color: var(--vd-accent-fg);
+}
+
+.vd-dictate-bars,
+.vd-dictate-wave {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.vd-dictate-bars {
+  height: 16px;
+}
+
+.vd-dictate-bar {
+  width: 3px;
+  height: 16px;
+  border-radius: 999px;
+  background: currentColor;
+  transition: transform 75ms var(--vd-ease);
+}
+
+.vd-dictate-wave {
+  height: 20px;
+  padding: 0 4px;
+  color: var(--vd-muted);
+}
+
+.vd-dictate-wave-bar {
+  width: 2px;
+  height: 20px;
+  border-radius: 999px;
+  background: currentColor;
+  transform: scaleY(0.15);
+  transition: transform 75ms var(--vd-ease);
+}
+
+/* No meter (phones): breathe instead of follow the voice. */
+.vd-dictate-bars[data-idle],
+.vd-dictate-wave[data-idle] {
+  animation: vd-breathe 1.6s var(--vd-ease) infinite;
+}
+
+@keyframes vd-breathe {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.vd-tip {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 6px);
+  z-index: 50;
+  width: max-content;
+  max-width: 16rem;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: var(--vd-accent);
+  color: var(--vd-accent-fg);
+  font-size: 12px;
+  line-height: 1.4;
+  pointer-events: none;
+}
+
+.vd-dictate[data-side="bottom"] .vd-tip {
+  top: calc(100% + 6px);
+  bottom: auto;
+}
+
+.vd-tip[data-error] {
+  background: var(--vd-danger);
+  color: var(--vd-danger-fg);
+}
+
+.vd-tip-line {
+  display: block;
+}
+
+.vd-tip-sub {
+  opacity: 0.7;
+}
+
+.vd-menu {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 8px);
+  z-index: 50;
+  width: 18rem;
+  max-width: calc(100vw - 16px);
+  padding: 6px;
+  border: 1px solid var(--vd-border);
+  border-radius: 12px;
+  background: var(--vd-surface);
+  color: var(--vd-fg);
+  font-size: 14px;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.18);
+}
+
+.vd-dictate[data-side="bottom"] .vd-menu,
+.vd-dictate[data-side="top"] .vd-menu[data-flip-y] {
+  top: calc(100% + 8px);
+  bottom: auto;
+}
+
+.vd-dictate[data-side="bottom"] .vd-menu[data-flip-y] {
+  top: auto;
+  bottom: calc(100% + 8px);
+}
+
+.vd-menu[data-flip-x] {
+  right: auto;
+  left: 0;
+}
+
+.vd-menu-group {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.vd-menu-label {
+  padding: 4px 8px;
+  color: var(--vd-muted);
+  font-size: 12px;
+}
+
+.vd-menu-option,
+.vd-menu-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.vd-menu-option:hover,
+.vd-menu-row:hover {
+  background: var(--vd-hover);
+}
+
+.vd-menu-option input {
+  accent-color: var(--vd-accent);
+  margin: 0;
+}
+
+.vd-menu-row {
+  justify-content: space-between;
+}
+
+.vd-menu-row select {
+  min-width: 0;
+  max-width: 62%;
+  padding: 2px 4px;
+  border: 1px solid var(--vd-border);
+  border-radius: 6px;
+  background: var(--vd-surface);
+  color: var(--vd-fg);
+  font: inherit;
+  font-size: 13px;
+}
+
+.vd-menu-truncate {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vd-menu-separator {
+  height: 1px;
+  margin: 4px 0;
+  border: 0;
+  background: var(--vd-border);
+}
+
+.vd-switch {
+  appearance: none;
+  position: relative;
+  flex-shrink: 0;
+  width: 34px;
+  height: 20px;
+  margin: 0;
+  border-radius: 999px;
+  background: var(--vd-border);
+  cursor: pointer;
+  transition: background-color 150ms var(--vd-ease);
+}
+
+.vd-switch::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: var(--vd-surface);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.2);
+  transition: transform 150ms var(--vd-ease);
+}
+
+.vd-switch:checked {
+  background: var(--vd-accent);
+}
+
+.vd-switch:checked::after {
+  transform: translateX(14px);
+}
+
+.vd-switch:focus-visible {
+  outline: 2px solid var(--vd-accent);
+  outline-offset: 2px;
+}
+
+/* ── VoiceDraftBar (0.1) ───────────────────────────────────────────────── */
+
 .vd-bar {
   display: flex;
   align-items: center;
   gap: 8px;
   width: 100%;
   min-height: 44px;
-  border: 1px solid #d4d4d8;
+  border: 1px solid var(--vd-border);
   border-radius: 999px;
   padding: 6px 8px;
-  background: #ffffff;
-  color: #18181b;
+  background: var(--vd-surface);
+  color: var(--vd-fg);
 }
 
 .vd-bar-idle {
   justify-content: space-between;
 }
 
-.vd-bar-listening {
-  justify-content: stretch;
-}
-
 .vd-button {
   appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border: 0;
   border-radius: 999px;
+  width: 32px;
   height: 32px;
-  min-width: 32px;
-  padding: 0 10px;
-  font: inherit;
-  font-size: 12px;
-  line-height: 1;
+  padding: 0;
   cursor: pointer;
+  transition:
+    background-color 150ms var(--vd-ease),
+    transform 150ms var(--vd-ease);
+}
+
+.vd-button:active {
+  transform: scale(0.96);
+}
+
+.vd-button:focus-visible {
+  outline: 2px solid var(--vd-accent);
+  outline-offset: 2px;
 }
 
 .vd-button:disabled {
@@ -37,19 +367,15 @@
   opacity: 0.5;
 }
 
-.vd-button-start {
-  background: #18181b;
-  color: #fafafa;
+.vd-button-start,
+.vd-button-confirm {
+  background: var(--vd-accent);
+  color: var(--vd-accent-fg);
 }
 
 .vd-button-cancel {
-  background: #f4f4f5;
-  color: #52525b;
-}
-
-.vd-button-confirm {
-  background: #18181b;
-  color: #fafafa;
+  background: var(--vd-hover);
+  color: var(--vd-muted);
 }
 
 .vd-waveform {
@@ -59,25 +385,34 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 1px;
+  gap: 2px;
   overflow: hidden;
 }
 
 .vd-wave {
+  flex-shrink: 0;
   width: 2px;
+  height: 32px;
   border-radius: 999px;
-  background: #71717a;
+  background: var(--vd-muted);
 }
 
 .vd-time {
   min-width: 42px;
   text-align: right;
   font-size: 12px;
-  color: #71717a;
+  color: var(--vd-muted);
   font-variant-numeric: tabular-nums;
 }
 
 .vd-hint {
   font-size: 12px;
-  color: #71717a;
+  color: var(--vd-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vd-dictate-bars[data-idle],
+  .vd-dictate-wave[data-idle] {
+    animation: none;
+  }
 }
