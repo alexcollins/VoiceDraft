@@ -5,8 +5,10 @@
 **Voice dictation for web apps.** A Claude-style mic button that writes into any text field as you speak. On-device speech recognition first, no inference engine and no cloud bill required.
 
 ```bash
-npm install voicedraft
+npm install github:alexcollins/voicedraft
 ```
+
+It builds itself on install (`prepare`). Not on the npm registry.
 
 ---
 
@@ -153,10 +155,7 @@ Also `--vd-fg`, `--vd-muted`, `--vd-surface`, `--vd-hover`, `--vd-border`, `--vd
 npm install
 npm run typecheck
 npm test            # builds, then node:test with jsdom, a fake recogniser and real ProseMirror
-npm run pack:check  # what would be published
 ```
-
-Releasing: `npm version minor && git push --follow-tags`. The Release workflow tests and publishes with provenance (needs the `NPM_TOKEN` secret).
 
 **Benchmark STT providers** against your own audio set:
 

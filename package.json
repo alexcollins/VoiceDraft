@@ -37,10 +37,6 @@
     "./styles.css": "./dist/react/voice-draft.css",
     "./package.json": "./package.json"
   },
-  "publishConfig": {
-    "access": "public",
-    "provenance": true
-  },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
     "react-dom": "^18.0.0 || ^19.0.0"
@@ -67,12 +63,11 @@
   "scripts": {
     "clean": "node scripts/clean-dist.mjs",
     "build": "npm run clean && tsc -p tsconfig.build.json && node scripts/copy-styles.mjs",
-    "prepack": "npm run build",
     "typecheck": "tsc --noEmit",
     "benchmark:stt": "node scripts/benchmark-stt.mjs",
     "test": "npm run build && node --test \"tests/*.test.mjs\"",
     "test:only": "node --test \"tests/*.test.mjs\"",
-    "pack:check": "npm pack --dry-run"
+    "prepare": "npm run build"
   },
   "keywords": [
     "voice",
@@ -88,5 +83,6 @@
     "on-device",
     "prosemirror",
     "tiptap"
-  ]
+  ],
+  "private": true
 }

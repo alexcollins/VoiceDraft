@@ -12,7 +12,6 @@ A rebuild around a shared dictation session, from the version running in SPCTRL 
 - Microphone choice: the chosen device's track is handed to `recognition.start(track)` where the engine supports it.
 - Error codes alongside English messages.
 - Tests: 39 cases with jsdom, a fake recogniser and real ProseMirror (0.1 had one, for the timer format).
-- npm release workflow with provenance.
 
 ### Fixed
 
@@ -24,7 +23,7 @@ A rebuild around a shared dictation session, from the version running in SPCTRL 
 - **Android continuous mode repeated words;** each utterance is now its own run there.
 - **Network and permission errors** were swallowed or surfaced raw.
 - **The bar's "Mic" / "X" / "OK" text buttons** are now icons, and the colours are theme variables.
-- **The README's install command** pointed at a package that wasn't published.
+- **The README's install command** pointed at a package that wasn't published. It now installs from GitHub, building on install.
 
 ### Changed
 
